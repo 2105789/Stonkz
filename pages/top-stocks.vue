@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="min-h-screen flex flex-col">
     <NavigationHeader />
-    <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 py-12 px-4">
+    <div class="flex-1 bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 pt-14 px-4 pb-12">
       <div class="max-w-6xl mx-auto">
-        <div class="text-center mb-10">
+        <div class="text-center mb-10 pt-6">
           <h1 class="text-3xl font-bold text-gray-800 mb-2">Top Stock Recommendations</h1>
           <p class="text-gray-600">Find the most confident stock recommendations sorted by confidence score</p>
         </div>

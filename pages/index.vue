@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="h-screen flex flex-col">
     <NavigationHeader />
-    <div class="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 py-12 px-4">
+    <div class="flex-1 flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 px-4">
       <div class="mb-8 flex items-center">
         <div class="flex items-center">
           <div class="bg-indigo-600 rounded-full p-2 mr-2">
@@ -152,6 +152,9 @@ onMounted(fetchList)
 body { 
   background: #f5f7fe; 
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 input, ul { 
   transition: all 0.2s ease;

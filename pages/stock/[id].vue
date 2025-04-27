@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="min-h-screen flex flex-col">
     <NavigationHeader />
-    <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 py-3 px-3 sm:py-6 sm:px-4 md:px-6 lg:px-8">
-      <div v-if="pending" class="flex justify-center items-center h-screen">
+    <div class="flex-1 bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-100 pt-14 px-3 sm:px-4 md:px-6 lg:px-8 pb-3 sm:pb-6">
+      <div v-if="pending" class="flex justify-center items-center h-[70vh]">
         <div class="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-2 border-b-2 border-indigo-500"></div>
         <p class="ml-4 text-gray-600">Loading Analysis...</p>
       </div>
-      <div v-else-if="error" class="max-w-3xl mx-auto bg-white p-4 sm:p-6 rounded-xl shadow-md border border-red-100">
+      <div v-else-if="error" class="max-w-3xl mx-auto bg-white p-4 sm:p-6 rounded-xl shadow-md border border-red-100 mt-6">
         <h2 class="text-xl sm:text-2xl font-semibold text-red-700 mb-3">Error Loading Data</h2>
         <p class="text-red-600 mb-4">Could not fetch the analysis details. Please try again later.</p>
         <pre class="bg-red-50 p-3 rounded text-sm text-red-800 overflow-x-auto">{{ error }}</pre>
@@ -14,7 +14,7 @@
           ← Back to Home
         </NuxtLink>
       </div>
-      <div v-else-if="doc" class="max-w-7xl mx-auto space-y-4 sm:space-y-6">
+      <div v-else-if="doc" class="max-w-7xl mx-auto space-y-4 sm:space-y-6 pt-6">
         <!-- Header -->
         <header class="flex flex-col p-4 sm:p-6 bg-white rounded-xl shadow-sm border border-gray-100">
           <div class="flex items-start gap-3 mb-3 sm:mb-0">
@@ -260,7 +260,7 @@
         </div>
 
       </div>
-      <div v-else class="text-center text-gray-500 py-10">
+      <div v-else class="text-center text-gray-500 py-10 mt-6">
         No data available for this ID.
       </div>
       <div class="sticky bottom-0 z-10 bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 max-w-7xl mx-auto mt-4">
