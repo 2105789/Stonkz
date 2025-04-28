@@ -9,7 +9,7 @@
         </div>
 
         <!-- Filter Tabs -->
-        <div class="flex justify-center mb-8">
+        <div class="flex justify-center mb-6">
           <div class="inline-flex bg-white p-1 rounded-xl shadow-sm">
             <button 
               v-for="tab in tabs" 
@@ -24,6 +24,38 @@
             >
               {{ tab.label }}
             </button>
+          </div>
+        </div>
+        
+        <!-- Price Range Filter -->
+        <div class="max-w-7xl mx-auto mb-8">
+          <div class="bg-white p-4 rounded-xl shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-medium text-gray-700">Price Range Filter</h3>
+              <button 
+                @click="clearPriceFilters" 
+                class="text-xs text-indigo-600 hover:text-indigo-800 transition-colors"
+                :class="{ 'opacity-50 cursor-not-allowed': selectedPriceRanges.length === 0 }"
+                :disabled="selectedPriceRanges.length === 0"
+              >
+                Clear Filters
+              </button>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="range in priceRanges"
+                :key="range.id"
+                @click="togglePriceRange(range.id)"
+                class="px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200"
+                :class="[
+                  selectedPriceRanges.includes(range.id)
+                    ? 'bg-indigo-100 text-indigo-800 ring-1 ring-indigo-400'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ]"
+              >
+                {{ range.label }}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -153,12 +185,43 @@ const tabs = [
   { label: 'Sell', value: 'SELL' }
 ]
 
+// Price range filter options
+const priceRanges = [
+  { id: 'range1', label: '₹0-10', min: 0, max: 10 },
+  { id: 'range2', label: '₹10-50', min: 10, max: 50 },
+  { id: 'range3', label: '₹50-100', min: 50, max: 100 },
+  { id: 'range4', label: '₹100-250', min: 100, max: 250 },
+  { id: 'range5', label: '₹250-500', min: 250, max: 500 },
+  { id: 'range6', label: '₹500-1000', min: 500, max: 1000 },
+  { id: 'range7', label: '₹1000-5000', min: 1000, max: 5000 },
+  { id: 'range8', label: '₹5000+', min: 5000, max: Infinity }
+]
+
 const activeTab = ref('ALL')
 const stocks = ref([])
 const loading = ref(true)
 const error = ref(null)
 const itemsPerPage = ref(6)
 const currentPage = ref(1)
+const selectedPriceRanges = ref([])
+
+// Toggle price range selection
+const togglePriceRange = (rangeId) => {
+  const index = selectedPriceRanges.value.indexOf(rangeId)
+  if (index === -1) {
+    selectedPriceRanges.value.push(rangeId)
+  } else {
+    selectedPriceRanges.value.splice(index, 1)
+  }
+  // Reset pagination when filters change
+  currentPage.value = 1
+}
+
+// Clear all price filters
+const clearPriceFilters = () => {
+  selectedPriceRanges.value = []
+  currentPage.value = 1
+}
 
 const filteredStocks = computed(() => {
   // First filter by active tab if not ALL
@@ -168,6 +231,25 @@ const filteredStocks = computed(() => {
         stock.model_based_signal && 
         stock.model_based_signal.recommendation === activeTab.value
       );
+  
+  // Apply price range filter if any ranges are selected
+  if (selectedPriceRanges.value.length > 0) {
+    filtered = filtered.filter(stock => {
+      // Get the current price from analysis_metadata
+      const currentPrice = stock.analysis_metadata?.current_price
+      
+      // Skip stocks without price information
+      if (currentPrice === undefined || currentPrice === null) {
+        return false
+      }
+      
+      // Check if the stock's price falls within any of the selected ranges
+      return selectedPriceRanges.value.some(rangeId => {
+        const range = priceRanges.find(r => r.id === rangeId)
+        return range && currentPrice >= range.min && currentPrice <= range.max
+      })
+    })
+  }
   
   // Always ensure sorting by confidence score in descending order
   return filtered.sort((a, b) => 
@@ -188,8 +270,8 @@ const loadMoreStocks = () => {
   currentPage.value++;
 }
 
-// Reset pagination when tab changes
-watch(activeTab, () => {
+// Reset pagination when filters change
+watch([activeTab, selectedPriceRanges], () => {
   currentPage.value = 1;
 })
 
@@ -198,8 +280,23 @@ const fetchStocks = async () => {
     loading.value = true
     error.value = null
     
+    // Build query parameters for price ranges
+    let url = '/api/top-stocks'
+    
+    // Only add price filter parameters if ranges are selected
+    if (selectedPriceRanges.value.length > 0) {
+      // Find min and max values from all selected ranges
+      const selectedRanges = priceRanges.filter(range => 
+        selectedPriceRanges.value.includes(range.id)
+      )
+      
+      // We don't send query params for client-side filtering
+      // This allows us to keep the filtering logic on the client
+      // which gives more flexibility for the UI interactions
+    }
+    
     // Fetch top stocks from API
-    const response = await fetch('/api/top-stocks')
+    const response = await fetch(url)
     if (!response.ok) {
       throw new Error('Failed to fetch top stocks')
     }

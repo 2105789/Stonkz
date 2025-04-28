@@ -8,7 +8,7 @@
           </svg>
         </div>
         <router-link to="/" class="text-lg font-bold text-gray-800 hover:text-indigo-600 transition-colors">
-          Stock Analysis
+          Stonkz
         </router-link>
       </div>
       <nav>

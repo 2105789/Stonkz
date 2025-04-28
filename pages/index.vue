@@ -9,7 +9,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
           </div>
-          <h1 class="text-2xl font-bold text-gray-800">Stock Analysis</h1>
+          <h1 class="text-2xl font-bold text-gray-800">Stonkz Analysis</h1>
         </div>
       </div>
       
