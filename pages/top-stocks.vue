@@ -52,76 +52,88 @@
             <p class="text-gray-600">No stock recommendations found for this category.</p>
           </div>
           
-          <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div 
-              v-for="stock in filteredStocks" 
-              :key="stock.id" 
-              class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition duration-200"
-            >
-              <div class="border-b border-gray-100 p-5">
-                <div class="flex items-center justify-between mb-2">
+          <div v-else>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div 
+                v-for="stock in paginatedStocks" 
+                :key="stock.id" 
+                class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition duration-200"
+              >
+                <div class="border-b border-gray-100 p-5">
+                  <div class="flex items-center justify-between mb-2">
+                    <router-link 
+                      :to="`/stock/${stock.id}`" 
+                      class="text-lg font-medium text-gray-900 hover:text-indigo-600"
+                    >
+                      {{ stock.name || stock.id }}
+                    </router-link>
+                    <div 
+                      :class="[
+                        'px-3 py-1 rounded-full text-xs font-semibold',
+                        stock.model_based_signal.recommendation === 'BUY' 
+                          ? 'bg-green-100 text-green-800' 
+                          : stock.model_based_signal.recommendation === 'SELL'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                      ]"
+                    >
+                      {{ stock.model_based_signal.recommendation }}
+                    </div>
+                  </div>
+                  <div class="flex items-center mb-4">
+                    <div class="font-semibold text-gray-900 mr-2">Confidence:</div>
+                    <div class="flex items-center">
+                      <div 
+                        class="h-2 w-24 bg-gray-100 rounded-full overflow-hidden"
+                      >
+                        <div 
+                          class="h-full rounded-full"
+                          :class="{
+                            'bg-green-500': stock.model_based_signal.recommendation === 'BUY',
+                            'bg-yellow-500': stock.model_based_signal.recommendation === 'HOLD',
+                            'bg-red-500': stock.model_based_signal.recommendation === 'SELL'
+                          }"
+                          :style="`width: ${stock.model_based_signal.confidence_score}%`"
+                        ></div>
+                      </div>
+                      <span class="ml-2 text-sm font-medium text-gray-700">
+                        {{ stock.model_based_signal.confidence_score }}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="px-5 py-4">
+                  <h3 class="text-sm font-medium text-gray-700 mb-2">Supporting Evidence:</h3>
+                  <ul class="text-sm text-gray-600 space-y-2">
+                    <li 
+                      v-for="(evidence, index) in stock.model_based_signal.supporting_evidence.slice(0, 2)" 
+                      :key="index"
+                      class="flex items-start"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mt-0.5 mr-1.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                      <span>{{ evidence }}</span>
+                    </li>
+                  </ul>
                   <router-link 
                     :to="`/stock/${stock.id}`" 
-                    class="text-lg font-medium text-gray-900 hover:text-indigo-600"
+                    class="block mt-4 text-sm text-indigo-600 hover:text-indigo-700"
                   >
-                    {{ stock.name || stock.id }}
+                    View full analysis →
                   </router-link>
-                  <div 
-                    :class="[
-                      'px-3 py-1 rounded-full text-xs font-semibold',
-                      stock.model_based_signal.recommendation === 'BUY' 
-                        ? 'bg-green-100 text-green-800' 
-                        : stock.model_based_signal.recommendation === 'SELL'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                    ]"
-                  >
-                    {{ stock.model_based_signal.recommendation }}
-                  </div>
-                </div>
-                <div class="flex items-center mb-4">
-                  <div class="font-semibold text-gray-900 mr-2">Confidence:</div>
-                  <div class="flex items-center">
-                    <div 
-                      class="h-2 w-24 bg-gray-100 rounded-full overflow-hidden"
-                    >
-                      <div 
-                        class="h-full rounded-full"
-                        :class="{
-                          'bg-green-500': stock.model_based_signal.recommendation === 'BUY',
-                          'bg-yellow-500': stock.model_based_signal.recommendation === 'HOLD',
-                          'bg-red-500': stock.model_based_signal.recommendation === 'SELL'
-                        }"
-                        :style="`width: ${stock.model_based_signal.confidence_score}%`"
-                      ></div>
-                    </div>
-                    <span class="ml-2 text-sm font-medium text-gray-700">
-                      {{ stock.model_based_signal.confidence_score }}%
-                    </span>
-                  </div>
                 </div>
               </div>
-              <div class="px-5 py-4">
-                <h3 class="text-sm font-medium text-gray-700 mb-2">Supporting Evidence:</h3>
-                <ul class="text-sm text-gray-600 space-y-2">
-                  <li 
-                    v-for="(evidence, index) in stock.model_based_signal.supporting_evidence.slice(0, 2)" 
-                    :key="index"
-                    class="flex items-start"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mt-0.5 mr-1.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                    <span>{{ evidence }}</span>
-                  </li>
-                </ul>
-                <router-link 
-                  :to="`/stock/${stock.id}`" 
-                  class="block mt-4 text-sm text-indigo-600 hover:text-indigo-700"
-                >
-                  View full analysis →
-                </router-link>
-              </div>
+            </div>
+            
+            <!-- Load More Button -->
+            <div v-if="hasMoreStocks" class="flex justify-center mt-8">
+              <button 
+                @click="loadMoreStocks" 
+                class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
+              >
+                Load More
+              </button>
             </div>
           </div>
         </div>
@@ -131,7 +143,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import NavigationHeader from '../components/NavigationHeader.vue'
 
 const tabs = [
@@ -145,15 +157,40 @@ const activeTab = ref('ALL')
 const stocks = ref([])
 const loading = ref(true)
 const error = ref(null)
+const itemsPerPage = ref(6)
+const currentPage = ref(1)
 
 const filteredStocks = computed(() => {
-  if (activeTab.value === 'ALL') {
-    return stocks.value
-  }
-  return stocks.value.filter(stock => 
-    stock.model_based_signal && 
-    stock.model_based_signal.recommendation === activeTab.value
-  )
+  // First filter by active tab if not ALL
+  let filtered = activeTab.value === 'ALL' 
+    ? stocks.value 
+    : stocks.value.filter(stock => 
+        stock.model_based_signal && 
+        stock.model_based_signal.recommendation === activeTab.value
+      );
+  
+  // Always ensure sorting by confidence score in descending order
+  return filtered.sort((a, b) => 
+    b.model_based_signal.confidence_score - a.model_based_signal.confidence_score
+  );
+})
+
+const paginatedStocks = computed(() => {
+  const lastIndex = currentPage.value * itemsPerPage.value;
+  return filteredStocks.value.slice(0, lastIndex);
+})
+
+const hasMoreStocks = computed(() => {
+  return paginatedStocks.value.length < filteredStocks.value.length;
+})
+
+const loadMoreStocks = () => {
+  currentPage.value++;
+}
+
+// Reset pagination when tab changes
+watch(activeTab, () => {
+  currentPage.value = 1;
 })
 
 const fetchStocks = async () => {
@@ -169,10 +206,16 @@ const fetchStocks = async () => {
     
     const data = await response.json()
     
-    // Sort by confidence score in descending order
-    stocks.value = data.sort((a, b) => 
-      b.model_based_signal.confidence_score - a.model_based_signal.confidence_score
-    )
+    // Combine all categories into a single array
+    // The API now returns { buy: [...], hold: [...], sell: [...] }
+    const allStocks = [
+      ...(data.buy || []),
+      ...(data.hold || []),
+      ...(data.sell || [])
+    ]
+    
+    // Store the combined array
+    stocks.value = allStocks
   } catch (err) {
     console.error('Error fetching top stocks:', err)
     error.value = 'Failed to load stock recommendations. Please try again.'
@@ -182,4 +225,4 @@ const fetchStocks = async () => {
 }
 
 onMounted(fetchStocks)
-</script> 
+</script>
