@@ -15,7 +15,9 @@ export default defineEventHandler(async (event) => {
   let filteredStocks = allStocks
   if (priceMin !== null || priceMax !== null) {
     filteredStocks = allStocks.filter(stock => {
-      const currentPrice = stock.analysis_metadata?.current_price
+      // Try to get the current price from multiple possible locations
+      const currentPrice = stock.price_projections?.current_price_data?.current_price ||
+                           stock.analysis_metadata?.current_price
       
       // Skip stocks without price information
       if (currentPrice === undefined || currentPrice === null) {
