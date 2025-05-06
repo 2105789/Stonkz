@@ -140,96 +140,96 @@
                 :key="stock.id" 
                 class="relative group transition duration-500"
               >
-                <div class="absolute -inset-x-2 -inset-y-2 bg-emerald-500/0 group-hover:bg-emerald-500/5 transition-colors duration-300 rounded-lg pointer-events-none"></div>
-                
-                <div class="flex items-center justify-between mb-3 sm:mb-4">
-                  <router-link 
-                    :to="`/stock/${stock.id}`" 
-                    class="text-base sm:text-xl font-light tracking-wide text-gray-800 hover:text-emerald-600 transition-all duration-300"
-                  >
-                    {{ stock.name || stock.id }}
-                  </router-link>
-                  <div 
-                    :class="[
-                      'relative px-2 sm:px-3 py-1 text-xs font-light tracking-wider uppercase transition-all duration-300 rounded-full',
-                      stock.model_based_signal.recommendation === 'BUY' 
-                        ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' 
-                        : stock.model_based_signal.recommendation === 'SELL'
-                          ? 'text-red-700 bg-red-50 border border-red-200'
-                          : 'text-amber-700 bg-amber-50 border border-amber-200'
-                    ]"
-                  >
-                    {{ stock.model_based_signal.recommendation }}
-                    <span 
-                      class="absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-emerald-50 hover:shadow-md hover:border-emerald-100 transition-all duration-300 transform group-hover:scale-[1.02] group-hover:-translate-y-1 h-[400px] flex flex-col">
+                  <div class="flex items-center justify-between mb-3 sm:mb-4">
+                    <router-link 
+                      :to="`/stock/${stock.id}`" 
+                      class="text-base sm:text-xl font-light tracking-wide text-gray-800 hover:text-emerald-600 transition-all duration-300 truncate max-w-[70%]"
+                    >
+                      {{ stock.name || stock.id }}
+                    </router-link>
+                    <div 
                       :class="[
+                        'relative px-2 sm:px-3 py-1 text-xs font-light tracking-wider uppercase transition-all duration-300 rounded-full',
                         stock.model_based_signal.recommendation === 'BUY' 
-                          ? 'bg-emerald-500' 
+                          ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' 
                           : stock.model_based_signal.recommendation === 'SELL'
-                            ? 'bg-red-500'
-                            : 'bg-amber-500'
+                            ? 'text-red-700 bg-red-50 border border-red-200'
+                            : 'text-amber-700 bg-amber-50 border border-amber-200'
                       ]"
-                    ></span>
-                  </div>
-                </div>
-                
-                <!-- Stock price display -->
-                <div class="flex items-center mt-2 sm:mt-3">
-                  <span class="text-xs font-light text-gray-500 uppercase mr-2">Price:</span>
-                  <span class="text-sm font-light text-gray-800">
-                    ₹{{ 
-                      stock.price_projections?.current_price_data?.current_price?.toFixed(2) || 
-                      stock.analysis_metadata?.current_price?.toFixed(2) || 
-                      stock.price?.toFixed(2) || 
-                      '—'
-                    }}
-                  </span>
-                </div>
-                
-                <!-- Confidence indicator -->
-                <div class="mb-5 sm:mb-6">
-                  <div class="flex items-center justify-between mb-1">
-                    <div class="font-light text-gray-700 text-xs uppercase tracking-wider">Confidence</div>
-                    <div class="text-xs font-light text-gray-600">
-                      {{ stock.model_based_signal.confidence_score }}%
+                    >
+                      {{ stock.model_based_signal.recommendation }}
+                      <span 
+                        class="absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
+                        :class="[
+                          stock.model_based_signal.recommendation === 'BUY' 
+                            ? 'bg-emerald-500' 
+                            : stock.model_based_signal.recommendation === 'SELL'
+                              ? 'bg-red-500'
+                              : 'bg-amber-500'
+                        ]"
+                      ></span>
                     </div>
                   </div>
-                  <div class="h-0.5 w-full bg-gray-100 rounded-full">
-                    <div 
-                      class="h-full transition-all duration-700 ease-out rounded-full"
-                      :class="{
-                        'bg-emerald-500': stock.model_based_signal.recommendation === 'BUY',
-                        'bg-amber-500': stock.model_based_signal.recommendation === 'HOLD',
-                        'bg-red-500': stock.model_based_signal.recommendation === 'SELL'
-                      }"
-                      :style="`width: ${stock.model_based_signal.confidence_score}%`"
-                    ></div>
-                  </div>
-                </div>
-                
-                <!-- Evidence section -->
-                <div class="mt-5 sm:mt-6 border-t border-emerald-100 pt-3 sm:pt-4">
-                  <h3 class="text-xs font-light tracking-wider uppercase text-gray-700 mb-2 sm:mb-3">Evidence</h3>
-                  <ul class="text-xs sm:text-sm text-gray-600 space-y-2 sm:space-y-3 font-light">
-                    <li 
-                      v-for="(evidence, index) in stock.model_based_signal.supporting_evidence.slice(0, 2)" 
-                      :key="index"
-                      class="flex items-start"
-                    >
-                      <span class="mr-2 text-emerald-400 font-light">—</span>
-                      <span>{{ evidence }}</span>
-                    </li>
-                  </ul>
                   
-                  <router-link 
-                    :to="`/stock/${stock.id}`" 
-                    class="group inline-flex items-center mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 hover:text-emerald-600 transition-all duration-300"
-                  >
-                    <span class="uppercase tracking-wider text-xs font-light">Full Analysis</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1 transition-transform duration-300 transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </router-link>
+                  <!-- Stock price display -->
+                  <div class="flex items-center mt-2 sm:mt-3">
+                    <span class="text-xs font-light text-gray-500 uppercase mr-2">Price:</span>
+                    <span class="text-sm font-light text-gray-800">
+                      ₹{{ 
+                        stock.price_projections?.current_price_data?.current_price?.toFixed(2) || 
+                        stock.analysis_metadata?.current_price?.toFixed(2) || 
+                        stock.price?.toFixed(2) || 
+                        '—'
+                      }}
+                    </span>
+                  </div>
+                  
+                  <!-- Confidence indicator -->
+                  <div class="mb-5 sm:mb-6">
+                    <div class="flex items-center justify-between mb-1">
+                      <div class="font-light text-gray-700 text-xs uppercase tracking-wider">Confidence</div>
+                      <div class="text-xs font-light text-gray-600">
+                        {{ stock.model_based_signal.confidence_score }}%
+                      </div>
+                    </div>
+                    <div class="h-0.5 w-full bg-gray-100 rounded-full">
+                      <div 
+                        class="h-full transition-all duration-700 ease-out rounded-full"
+                        :class="{
+                          'bg-emerald-500': stock.model_based_signal.recommendation === 'BUY',
+                          'bg-amber-500': stock.model_based_signal.recommendation === 'HOLD',
+                          'bg-red-500': stock.model_based_signal.recommendation === 'SELL'
+                        }"
+                        :style="`width: ${stock.model_based_signal.confidence_score}%`"
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <!-- Evidence section -->
+                  <div class="mt-5 sm:mt-6 border-t border-emerald-100 pt-3 sm:pt-4 flex-grow overflow-hidden flex flex-col">
+                    <h3 class="text-xs font-light tracking-wider uppercase text-gray-700 mb-2 sm:mb-3">Evidence</h3>
+                    <ul class="text-xs sm:text-sm text-gray-600 space-y-2 sm:space-y-3 font-light overflow-hidden flex-grow">
+                      <li 
+                        v-for="(evidence, index) in stock.model_based_signal.supporting_evidence.slice(0, 2)" 
+                        :key="index"
+                        class="flex items-start"
+                      >
+                        <span class="mr-2 text-emerald-400 font-light flex-shrink-0">—</span>
+                        <span class="line-clamp-3 overflow-hidden">{{ evidence }}</span>
+                      </li>
+                    </ul>
+                    
+                    <router-link 
+                      :to="`/stock/${stock.id}`" 
+                      class="group inline-flex items-center mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 hover:text-emerald-600 transition-all duration-300 mt-auto"
+                    >
+                      <span class="uppercase tracking-wider text-xs font-light">Full Analysis</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1 transition-transform duration-300 transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </router-link>
+                  </div>
                 </div>
               </div>
             </div>
