@@ -20,6 +20,13 @@ export default defineNuxtConfig({
           rel: 'stylesheet', 
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap' 
         }
+      ],
+      script: [
+        {
+          src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7654299309597622',
+          async: true,
+          crossorigin: 'anonymous'
+        }
       ]
     },
     pageTransition: {
