@@ -1,71 +1,74 @@
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div :class="[$dc('page-container'), 'min-h-screen flex flex-col']">
     <NavigationHeader />
     <MobileNavigation />
-    <div class="flex-1 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 pt-1 sm:pt-1 px-3 sm:px-4 md:px-6 lg:px-8 pb-28 md:pb-12 md:ml-20">
-      <div v-if="pending" class="flex justify-center items-center h-[70vh]">
-        <div class="animate-spin h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 border-t-2 border-emerald-500"></div>
-        <p class="ml-4 sm:ml-6 text-emerald-600 uppercase tracking-wider text-sm font-light">Loading Analysis</p>
+    <div :class="[$dc('content-wrapper'), 'flex-1 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 pt-1 sm:pt-1 px-3 sm:px-4 md:px-6 lg:px-8 pb-28 md:pb-12 md:ml-20']">
+      <div v-if="pending" :class="[$dc('loading-container'), 'flex justify-center items-center h-[70vh]']">
+        <div :class="[$dc('loading-spinner'), 'animate-spin h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 border-t-2 border-emerald-500']"></div>
+        <p :class="[$dc('loading-text'), 'ml-4 sm:ml-6 text-emerald-600 uppercase tracking-wider text-sm font-light']">Loading Analysis</p>
       </div>
-      <div v-else-if="error" class="max-w-3xl mx-auto bg-white p-4 sm:p-6 md:p-8 border border-emerald-200 mt-6 rounded-xl shadow-sm">
-        <h2 class="text-lg sm:text-xl md:text-2xl font-light tracking-wider text-gray-800 uppercase mb-4 sm:mb-6">Error Loading Data</h2>
-        <p class="text-gray-700 mb-6 font-light text-sm sm:text-base">Could not fetch the analysis details. Please try again later.</p>
-        <pre class="bg-gray-50 p-3 sm:p-5 text-xs sm:text-sm text-gray-600 overflow-x-auto font-light rounded-lg">{{ error }}</pre>
-        <NuxtLink to="/" class="mt-6 sm:mt-8 inline-flex items-center text-emerald-600 hover:text-emerald-700 transition duration-300 font-light uppercase tracking-wider text-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div v-else-if="error" :class="[$dc('error-container'), 'max-w-3xl mx-auto bg-white p-4 sm:p-6 md:p-8 border border-emerald-200 mt-6 rounded-xl shadow-sm']">
+        <h2 :class="[$dc('error-heading'), 'text-lg sm:text-xl md:text-2xl font-light tracking-wider text-gray-800 uppercase mb-4 sm:mb-6']">Error Loading Data</h2>
+        <p :class="[$dc('error-message'), 'text-gray-700 mb-6 font-light text-sm sm:text-base']">Could not fetch the analysis details. Please try again later.</p>
+        <pre :class="[$dc('error-details'), 'bg-gray-50 p-3 sm:p-5 text-xs sm:text-sm text-gray-600 overflow-x-auto font-light rounded-lg']">{{ error }}</pre>
+        <NuxtLink to="/" :class="[$dc('back-link'), 'mt-6 sm:mt-8 inline-flex items-center text-emerald-600 hover:text-emerald-700 transition duration-300 font-light uppercase tracking-wider text-sm']">
+          <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('back-icon'), 'h-3 w-3 sm:h-4 sm:w-4 mr-2']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Back to Home
         </NuxtLink>
       </div>
-      <div v-else-if="doc" class="max-w-7xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 pt-4 sm:pt-6">
+      <div v-else-if="doc" :class="[$dc('data-container'), 'max-w-7xl mx-auto space-y-4 sm:space-y-6 md:space-y-8 pt-4 sm:pt-6']">
         <!-- Header - Redesigned to be more modern and consistent with homepage -->
-        <div class="bg-white rounded-xl overflow-hidden shadow-sm">
+        <div :class="[$dc('header-card'), 'bg-white rounded-xl overflow-hidden shadow-sm']">
           <!-- Visual header with gradient -->
-          <div class="h-5 md:h-12 relative overflow-hidden"
-            :class="{
+          <div :class="[
+            $dc('gradient-header'),
+            'h-5 md:h-12 relative overflow-hidden',
+            {
               'bg-gradient-to-r from-emerald-600 to-teal-600': doc.model_based_signal?.recommendation === 'BUY',
               'bg-gradient-to-r from-amber-500 to-orange-500': doc.model_based_signal?.recommendation === 'HOLD',
               'bg-gradient-to-r from-red-600 to-rose-600': doc.model_based_signal?.recommendation === 'SELL',
               'bg-gradient-to-r from-gray-500 to-slate-600': !doc.model_based_signal?.recommendation
-            }"
-          >
-            <div class="absolute bottom-0 right-0 h-20 w-20 sm:h-24 sm:w-24 bg-white/10 rounded-full -mb-10 -mr-10 sm:-mb-12 sm:-mr-12"></div>
-            <div class="absolute top-0 left-1/4 h-8 w-8 sm:h-12 sm:w-12 bg-white/5 rounded-full -mt-4 sm:-mt-6"></div>
+            }
+          ]">
+            <div :class="[$dc('gradient-circle-1'), 'absolute bottom-0 right-0 h-20 w-20 sm:h-24 sm:w-24 bg-white/10 rounded-full -mb-10 -mr-10 sm:-mb-12 sm:-mr-12']"></div>
+            <div :class="[$dc('gradient-circle-2'), 'absolute top-0 left-1/4 h-8 w-8 sm:h-12 sm:w-12 bg-white/5 rounded-full -mt-4 sm:-mt-6']"></div>
           </div>
           
           <!-- Content section -->
-          <div class="p-4 sm:p-6 md:p-8">
-            <div class="flex flex-col sm:flex-row justify-between">
+          <div :class="[$dc('header-content'), 'p-4 sm:p-6 md:p-8']">
+            <div :class="[$dc('header-row'), 'flex flex-col sm:flex-row justify-between']">
               <!-- Stock name and info -->
-              <div class="mb-5 sm:mb-0">
-                <div class="flex items-center">
-                  <div class="bg-gradient-to-r from-emerald-600 to-teal-600 w-8 h-8 sm:w-10 sm:h-10 rounded-lg shadow-sm flex items-center justify-center mr-3 sm:mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div :class="[$dc('stock-info'), 'mb-5 sm:mb-0']">
+                <div :class="[$dc('stock-title-row'), 'flex items-center']">
+                  <div :class="[$dc('stock-icon'), 'bg-gradient-to-r from-emerald-600 to-teal-600 w-8 h-8 sm:w-10 sm:h-10 rounded-lg shadow-sm flex items-center justify-center mr-3 sm:mr-4']">
+                    <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('icon-svg'), 'h-4 w-4 sm:h-5 sm:w-5 text-white']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                   </div>
-                  <h1 class="text-xl sm:text-2xl md:text-3xl font-light tracking-wide text-gray-900">
+                  <h1 :class="[$dc('stock-name'), 'text-xl sm:text-2xl md:text-3xl font-light tracking-wide text-gray-900']">
                     {{ doc.id }}
-                    <span class="block sm:inline text-sm sm:text-lg md:text-xl font-extralight text-gray-600 ml-0 sm:ml-2">({{ doc.analysis_metadata?.symbol || 'N/A' }})</span>
+                    <span :class="[$dc('stock-symbol'), 'block sm:inline text-sm sm:text-lg md:text-xl font-extralight text-gray-600 ml-0 sm:ml-2']">({{ doc.analysis_metadata?.symbol || 'N/A' }})</span>
                   </h1>
                 </div>
                 
-                <p v-if="doc.price_projections?.current_price_data?.current_price" class="text-xl sm:text-2xl md:text-3xl font-light text-gray-800 mt-3 sm:mt-4">
+                <p v-if="doc.price_projections?.current_price_data?.current_price" :class="[$dc('stock-price'), 'text-xl sm:text-2xl md:text-3xl font-light text-gray-800 mt-3 sm:mt-4']">
                   ₹{{ doc.price_projections.current_price_data.current_price.toFixed(2) }}
                 </p>
                 
-                <p class="text-xs text-gray-500 mt-2 font-light">
+                <p :class="[$dc('timestamp'), 'text-xs text-gray-500 mt-2 font-light']">
                   Analysis: {{ formatDate(doc.analysis_metadata?.analysis_timestamp_str) }}
-                  <span class="block sm:inline mt-1 sm:mt-0 sm:ml-4"> Validated: {{ formatDate(doc.analysis_metadata?.validation_timestamp) }}</span>
+                  <span :class="[$dc('timestamp-validated'), 'block sm:inline mt-1 sm:mt-0 sm:ml-4']"> Validated: {{ formatDate(doc.analysis_metadata?.validation_timestamp) }}</span>
                 </p>
               </div>
               
               <!-- Recommendation and confidence -->
-              <div class="flex flex-col items-start sm:items-end">
-                <div v-if="doc.model_based_signal" class="mb-3 sm:mb-4">
+              <div :class="[$dc('signals-container'), 'flex flex-col items-start sm:items-end']">
+                <div v-if="doc.model_based_signal" :class="[$dc('recommendation-container'), 'mb-3 sm:mb-4']">
                   <span 
                     :class="[
+                      $dc('recommendation-tag'),
                       'inline-flex items-center px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium tracking-wider uppercase',
                       doc.model_based_signal.recommendation === 'BUY' 
                         ? 'bg-emerald-100 text-emerald-800' 
@@ -73,15 +76,16 @@
                           ? 'bg-red-100 text-red-800'
                           : 'bg-amber-100 text-amber-800'
                     ]"
+                    :data-recommendation="doc.model_based_signal.recommendation"
                   >
-                    <span class="mr-1.5">
-                      <svg v-if="doc.model_based_signal.recommendation === 'BUY'" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span :class="[$dc('recommendation-icon'), 'mr-1.5']">
+                      <svg v-if="doc.model_based_signal.recommendation === 'BUY'" xmlns="http://www.w3.org/2000/svg" :class="[$dc('icon-buy'), 'h-3 w-3 sm:h-4 sm:w-4']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                       </svg>
-                      <svg v-else-if="doc.model_based_signal.recommendation === 'SELL'" xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg v-else-if="doc.model_based_signal.recommendation === 'SELL'" xmlns="http://www.w3.org/2000/svg" :class="[$dc('icon-sell'), 'h-3 w-3 sm:h-4 sm:w-4']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                       </svg>
-                      <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg v-else xmlns="http://www.w3.org/2000/svg" :class="[$dc('icon-hold'), 'h-3 w-3 sm:h-4 sm:w-4']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14" />
                       </svg>
                     </span>
@@ -89,40 +93,48 @@
                 </span>
                 </div>
                 
-                <div v-if="doc.confidence_level" class="mb-2 sm:mb-3">
-                  <div class="flex items-center">
-                    <div class="w-16 xs:w-20 sm:w-28 md:w-full bg-gray-200 rounded-full h-1.5">
+                <!-- Confidence indicators -->
+                <div v-if="doc.confidence_level" :class="[$dc('confidence-container'), 'mb-2 sm:mb-3']">
+                  <div :class="[$dc('confidence-meter'), 'flex items-center']">
+                    <div :class="[$dc('confidence-bar-bg'), 'w-16 xs:w-20 sm:w-28 md:w-full bg-gray-200 rounded-full h-1.5']">
                       <div 
-                        class="h-1.5 rounded-full" 
-                        :class="{
-                          'bg-emerald-500': doc.confidence_level.rating === 'HIGH',
-                          'bg-amber-500': doc.confidence_level.rating === 'MEDIUM',
-                          'bg-red-500': doc.confidence_level.rating === 'LOW'
-                        }"
+                        :class="[
+                          $dc('confidence-bar'),
+                          'h-1.5 rounded-full',
+                          {
+                            'bg-emerald-500': doc.confidence_level.rating === 'HIGH',
+                            'bg-amber-500': doc.confidence_level.rating === 'MEDIUM',
+                            'bg-red-500': doc.confidence_level.rating === 'LOW'
+                          }
+                        ]"
                         :style="`width: ${doc.confidence_level.score}%`"
                       ></div>
                     </div>
-                    <span class="ml-2 sm:ml-3 text-xs font-medium text-gray-500">{{ doc.confidence_level.score }}/100</span>
+                    <span :class="[$dc('confidence-score'), 'ml-2 sm:ml-3 text-xs font-medium text-gray-500']">{{ doc.confidence_level.score }}/100</span>
                   </div>
-                  <p class="mt-1 text-xs font-light text-gray-500 text-right">Confidence: {{ doc.confidence_level.rating }}</p>
+                  <p :class="[$dc('confidence-label'), 'mt-1 text-xs font-light text-gray-500 text-right']">Confidence: {{ doc.confidence_level.rating }}</p>
                 </div>
                 
-                <div v-if="doc.model_based_signal" class="mt-2">
-                  <div class="flex items-center">
-                    <div class="w-16 xs:w-20 sm:w-28 md:w-full bg-gray-200 rounded-full h-1.5">
+                <!-- Signal strength indicator -->
+                <div v-if="doc.model_based_signal" :class="[$dc('signal-container'), 'mt-2']">
+                  <div :class="[$dc('signal-meter'), 'flex items-center']">
+                    <div :class="[$dc('signal-bar-bg'), 'w-16 xs:w-20 sm:w-28 md:w-full bg-gray-200 rounded-full h-1.5']">
                       <div 
-                        class="h-1.5 rounded-full" 
-                        :class="{
-                          'bg-emerald-500': doc.model_based_signal.recommendation === 'BUY',
-                          'bg-amber-500': doc.model_based_signal.recommendation === 'HOLD',
-                          'bg-red-500': doc.model_based_signal.recommendation === 'SELL'
-                        }"
+                        :class="[
+                          $dc('signal-bar'),
+                          'h-1.5 rounded-full',
+                          {
+                            'bg-emerald-500': doc.model_based_signal.recommendation === 'BUY',
+                            'bg-amber-500': doc.model_based_signal.recommendation === 'HOLD',
+                            'bg-red-500': doc.model_based_signal.recommendation === 'SELL'
+                          }
+                        ]"
                         :style="`width: ${doc.model_based_signal.confidence_score}%`"
                       ></div>
                     </div>
-                    <span class="ml-2 sm:ml-3 text-xs font-medium text-gray-500">{{ doc.model_based_signal.confidence_score }}/100</span>
+                    <span :class="[$dc('signal-score'), 'ml-2 sm:ml-3 text-xs font-medium text-gray-500']">{{ doc.model_based_signal.confidence_score }}/100</span>
                   </div>
-                  <p class="mt-1 text-xs font-light text-gray-500 text-right">Signal Strength</p>
+                  <p :class="[$dc('signal-label'), 'mt-1 text-xs font-light text-gray-500 text-right']">Signal Strength</p>
                 </div>
               </div>
             </div>
@@ -663,6 +675,8 @@ import { useRoute, useFetch, defineAsyncComponent } from '#imports';
 import { computed, ref } from 'vue';
 import NavigationHeader from '~/components/NavigationHeader.vue'
 import MobileNavigation from '../../components/MobileNavigation.vue'
+
+const { $dc, $did, $da } = useNuxtApp();
 
 // Check if debug mode is enabled via URL parameter
 const route = useRoute();

@@ -1,34 +1,35 @@
 <template>
-  <div class="min-h-screen flex flex-col">
+  <div :class="[$dc('page-container'), 'min-h-screen flex flex-col']">
     <NavigationHeader />
     <MobileNavigation />
-    <div class="flex-1 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 pt-0 md:ml-20">
+    <div :class="[$dc('page-content'), 'flex-1 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20 pt-0 md:ml-20']">
     
       <!-- Header area with angled design -->
-      <div class="relative h-36 sm:h-48 mb-6 sm:mb-8 overflow-hidden">
-        <div class="absolute inset-0 bg-emerald-500/10 transform -skew-y-3 origin-bottom-left"></div>
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="text-center px-4">
-            <h1 class="text-2xl sm:text-3xl font-extralight tracking-wider text-gray-900 relative inline-block">
-              <span class="relative">Top Recommendations</span>
-              <span class="absolute -right-6 -top-2 w-2 h-2 bg-emerald-600"></span>
+      <div :class="[$dc('header-area'), 'relative h-36 sm:h-48 mb-6 sm:mb-8 overflow-hidden']">
+        <div :class="[$dc('header-bg'), 'absolute inset-0 bg-emerald-500/10 transform -skew-y-3 origin-bottom-left']"></div>
+        <div :class="[$dc('header-content'), 'absolute inset-0 flex items-center justify-center']">
+          <div :class="[$dc('header-text'), 'text-center px-4']">
+            <h1 :class="[$dc('page-title'), 'text-2xl sm:text-3xl font-extralight tracking-wider text-gray-900 relative inline-block']">
+              <span :class="[$dc('title-wrapper'), 'relative']">Top Recommendations</span>
+              <span :class="[$dc('title-dot'), 'absolute -right-6 -top-2 w-2 h-2 bg-emerald-600']"></span>
             </h1>
-            <p class="text-gray-700 font-light tracking-wide mt-2 text-sm sm:text-base">Highest confidence analysis by intelligent models</p>
+            <p :class="[$dc('page-subtitle'), 'text-gray-700 font-light tracking-wide mt-2 text-sm sm:text-base']">Highest confidence analysis by intelligent models</p>
           </div>
         </div>
       </div>
       
-      <div class="px-4 sm:px-6 lg:px-12 pb-20 md:pb-8">
+      <div :class="[$dc('content-wrapper'), 'px-4 sm:px-6 lg:px-12 pb-20 md:pb-8']">
         <!-- Filter Controls -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center max-w-7xl mx-auto mb-6 sm:mb-10">
+        <div :class="[$dc('filter-controls'), 'flex flex-col md:flex-row justify-between items-start md:items-center max-w-7xl mx-auto mb-6 sm:mb-10']">
           <!-- Filter Tabs -->
-          <div class="flex mb-6 md:mb-0 overflow-x-auto pb-2 w-full md:w-auto">
-            <div class="flex border-b border-emerald-200 mr-6">
+          <div :class="[$dc('tab-container'), 'flex mb-6 md:mb-0 overflow-x-auto pb-2 w-full md:w-auto']">
+            <div :class="[$dc('tabs-wrapper'), 'flex border-b border-emerald-200 mr-6']">
               <button 
                 v-for="tab in tabs" 
                 :key="tab.value"
                 @click="activeTab = tab.value"
                 :class="[
+                  $dc('tab-button'),
                   'relative px-3 sm:px-5 py-2 font-light text-xs sm:text-sm tracking-wider uppercase transition-all duration-300 mr-4 sm:mr-6 last:mr-0 whitespace-nowrap',
                   activeTab === tab.value 
                     ? 'text-emerald-700' 
@@ -37,25 +38,23 @@
               >
                 {{ tab.label }}
                 <span 
-                  class="absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 transition-transform duration-300" 
-                  :class="{ '!scale-x-100': activeTab === tab.value }"
+                  :class="[$dc('tab-indicator'), 'absolute bottom-0 left-0 w-full h-0.5 bg-emerald-500 transform scale-x-0 transition-transform duration-300', { '!scale-x-100': activeTab === tab.value }]"
                 ></span>
               </button>
             </div>
           </div>
           
           <!-- Price Range Filter Toggle -->
-          <div class="relative">
+          <div :class="[$dc('filter-toggle-wrapper'), 'relative']">
             <button 
               @click="showPriceFilter = !showPriceFilter" 
-              class="flex items-center text-xs sm:text-sm font-light tracking-wider transition-colors py-2"
-              :class="selectedPriceRanges.length > 0 ? 'text-emerald-600' : 'text-gray-700 hover:text-emerald-600'"
+              :class="[$dc('filter-toggle'), 'flex items-center text-xs sm:text-sm font-light tracking-wider transition-colors py-2', selectedPriceRanges.length > 0 ? 'text-emerald-600' : 'text-gray-700 hover:text-emerald-600']"
             >
-              <span class="uppercase">Filter</span>
-              <span v-if="selectedPriceRanges.length > 0" class="mx-1 text-xs bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full">
+              <span :class="[$dc('filter-label'), 'uppercase']">Filter</span>
+              <span v-if="selectedPriceRanges.length > 0" :class="[$dc('filter-count'), 'mx-1 text-xs bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full']">
                 {{ selectedPriceRanges.length }}
               </span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-2" :class="{ 'rotate-180': showPriceFilter }" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('filter-arrow'), 'h-3 w-3 sm:h-4 sm:w-4 ml-2', { 'rotate-180': showPriceFilter }]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -65,30 +64,30 @@
         <!-- Price Range Filter Panel -->
         <div 
           v-if="showPriceFilter" 
-          class="max-w-7xl mx-auto mb-6 sm:mb-8 transform transition-all duration-300 border-b border-emerald-100 pb-6"
-          :class="showPriceFilter ? 'opacity-100' : 'opacity-0 -translate-y-4 pointer-events-none'"
+          :class="[$dc('price-filter-panel'), 'max-w-7xl mx-auto mb-6 sm:mb-8 transform transition-all duration-300 border-b border-emerald-100 pb-6', showPriceFilter ? 'opacity-100' : 'opacity-0 -translate-y-4 pointer-events-none']"
         >
-          <div class="flex flex-wrap items-center">
-            <h3 class="text-xs sm:text-sm font-light uppercase tracking-wider text-gray-800 mr-6 mb-4">Price Range</h3>
-            <div class="flex flex-wrap gap-2 sm:gap-3">
+          <div :class="[$dc('filter-content'), 'flex flex-wrap items-center']">
+            <h3 :class="[$dc('filter-title'), 'text-xs sm:text-sm font-light uppercase tracking-wider text-gray-800 mr-6 mb-4']">Price Range</h3>
+            <div :class="[$dc('filter-options'), 'flex flex-wrap gap-2 sm:gap-3']">
               <button
                 v-for="range in priceRanges"
                 :key="range.id"
                 @click="togglePriceRange(range.id)"
-                class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-light tracking-wider transition-all duration-300 rounded-lg"
                 :class="[
+                  $dc('price-range-button'), 
+                  'px-3 sm:px-4 py-1.5 sm:py-2 text-xs font-light tracking-wider transition-all duration-300 rounded-lg',
                   selectedPriceRanges.includes(range.id)
                     ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white'
                     : 'bg-white text-gray-700 border border-emerald-200 hover:border-emerald-300'
                 ]"
+                :data-range-id="range.id"
               >
                 {{ range.label }}
               </button>
               
               <button 
                 @click="clearPriceFilters" 
-                class="text-xs text-gray-500 hover:text-emerald-600 transition-colors uppercase tracking-wider font-light px-3 sm:px-4 py-1.5 sm:py-2 border border-transparent"
-                :class="{ 'opacity-50 cursor-not-allowed': selectedPriceRanges.length === 0 }"
+                :class="[$dc('clear-filters'), 'text-xs text-gray-500 hover:text-emerald-600 transition-colors uppercase tracking-wider font-light px-3 sm:px-4 py-1.5 sm:py-2 border border-transparent', { 'opacity-50 cursor-not-allowed': selectedPriceRanges.length === 0 }]"
                 :disabled="selectedPriceRanges.length === 0"
               >
                 Clear
@@ -98,178 +97,179 @@
         </div>
 
         <!-- Loading State -->
-        <div v-if="loading" class="flex justify-center my-12 sm:my-16">
-          <div class="flex flex-col items-center">
-            <svg class="animate-spin h-8 w-8 sm:h-10 sm:w-10 text-emerald-600 mb-3 sm:mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <div v-if="loading" :class="[$dc('loading-state'), 'flex justify-center my-12 sm:my-16']">
+          <div :class="[$dc('loading-container'), 'flex flex-col items-center']">
+            <svg :class="[$dc('loading-spinner'), 'animate-spin h-8 w-8 sm:h-10 sm:w-10 text-emerald-600 mb-3 sm:mb-4']" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
             </svg>
-            <span class="text-emerald-600 font-light uppercase tracking-wider text-xs">Loading</span>
+            <span :class="[$dc('loading-text'), 'text-emerald-600 font-light uppercase tracking-wider text-xs']">Loading</span>
           </div>
         </div>
 
         <!-- Error State -->
-        <div v-else-if="error" class="max-w-xl mx-auto border-l-2 border-emerald-300 p-4 sm:p-6 rounded-lg text-center">
-          <p class="text-gray-700 mb-4 text-sm sm:text-base">{{ error }}</p>
-          <button @click="fetchStocks" class="px-4 sm:px-5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:shadow-md transition-all duration-300 text-xs tracking-wider uppercase font-light">
+        <div v-else-if="error" :class="[$dc('error-container'), 'max-w-xl mx-auto border-l-2 border-emerald-300 p-4 sm:p-6 rounded-lg text-center']">
+          <p :class="[$dc('error-text'), 'text-gray-700 mb-4 text-sm sm:text-base']">{{ error }}</p>
+          <button @click="fetchStocks" :class="[$dc('retry-button'), 'px-4 sm:px-5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg hover:shadow-md transition-all duration-300 text-xs tracking-wider uppercase font-light']">
             Try Again
           </button>
         </div>
 
         <!-- Stock Recommendations List -->
-        <div v-else class="max-w-7xl mx-auto">
-          <div v-if="filteredStocks.length === 0" class="text-center my-12 sm:my-20">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div v-else :class="[$dc('stocks-list'), 'max-w-7xl mx-auto']">
+          <div v-if="filteredStocks.length === 0" :class="[$dc('empty-state'), 'text-center my-12 sm:my-20']">
+            <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('empty-icon'), 'h-10 w-10 mx-auto mb-4 text-gray-400']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p class="text-gray-600 font-light tracking-wide text-sm sm:text-base mb-2">No stock recommendations found for the selected filters.</p>
-            <div v-if="selectedPriceRanges.length > 0" class="mt-4">
+            <p :class="[$dc('empty-text'), 'text-gray-600 font-light tracking-wide text-sm sm:text-base mb-2']">No stock recommendations found for the selected filters.</p>
+            <div v-if="selectedPriceRanges.length > 0" :class="[$dc('empty-actions'), 'mt-4']">
               <button 
                 @click="clearPriceFilters" 
-                class="text-xs text-emerald-600 hover:text-emerald-700 border border-emerald-200 hover:border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-colors duration-300 px-4 py-2 rounded-lg uppercase tracking-wider font-light"
+                :class="[$dc('clear-button'), 'text-xs text-emerald-600 hover:text-emerald-700 border border-emerald-200 hover:border-emerald-300 bg-emerald-50 hover:bg-emerald-100 transition-colors duration-300 px-4 py-2 rounded-lg uppercase tracking-wider font-light']"
               >
                 Clear Price Filters
               </button>
             </div>
           </div>
           
-          <div v-else>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
-              <div 
-                v-for="stock in paginatedStocks" 
-                :key="stock.id" 
-                class="relative group transition duration-500"
-              >
-                <div class="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-emerald-50 hover:shadow-md hover:border-emerald-100 transition-all duration-300 transform group-hover:scale-[1.02] group-hover:-translate-y-1 h-[400px] flex flex-col">
-                  <div class="flex items-center justify-between mb-3 sm:mb-4">
-                    <router-link 
-                      :to="`/stock/${stock.id}`" 
-                      class="text-base sm:text-xl font-light tracking-wide text-gray-800 hover:text-emerald-600 transition-all duration-300 truncate max-w-[70%]"
-                    >
-                      {{ stock.name || stock.id }}
-                    </router-link>
-                    <div 
+          <div v-else :class="[$dc('stocks-grid'), 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8']">
+            <div 
+              v-for="stock in paginatedStocks" 
+              :key="stock.id" 
+              :class="[$dc('stock-card-wrapper'), 'relative group transition duration-500']"
+              :data-stock-id="stock.id"
+            >
+              <div :class="[$dc('stock-card'), 'bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-emerald-50 hover:shadow-md hover:border-emerald-100 transition-all duration-300 transform group-hover:scale-[1.02] group-hover:-translate-y-1 h-[400px] flex flex-col']">
+                <div :class="[$dc('card-header'), 'flex items-center justify-between mb-3 sm:mb-4']">
+                  <router-link 
+                    :to="`/stock/${stock.id}`" 
+                    :class="[$dc('stock-name'), 'text-base sm:text-xl font-light tracking-wide text-gray-800 hover:text-emerald-600 transition-all duration-300 truncate max-w-[70%]']"
+                  >
+                    {{ stock.name || stock.id }}
+                  </router-link>
+                  <div 
+                    :class="[
+                      $dc('recommendation-tag'), 
+                      'relative px-2 sm:px-3 py-1 text-xs font-light tracking-wider uppercase transition-all duration-300 rounded-full',
+                      stock.model_based_signal.recommendation === 'BUY' 
+                        ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' 
+                        : stock.model_based_signal.recommendation === 'SELL'
+                          ? 'text-red-700 bg-red-50 border border-red-200'
+                          : 'text-amber-700 bg-amber-50 border border-amber-200'
+                    ]"
+                  >
+                    {{ stock.model_based_signal.recommendation }}
+                    <span 
                       :class="[
-                        'relative px-2 sm:px-3 py-1 text-xs font-light tracking-wider uppercase transition-all duration-300 rounded-full',
+                        $dc('recommendation-indicator'),
+                        'absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300',
                         stock.model_based_signal.recommendation === 'BUY' 
-                          ? 'text-emerald-700 bg-emerald-50 border border-emerald-200' 
+                          ? 'bg-emerald-500' 
                           : stock.model_based_signal.recommendation === 'SELL'
-                            ? 'text-red-700 bg-red-50 border border-red-200'
-                            : 'text-amber-700 bg-amber-50 border border-amber-200'
+                            ? 'bg-red-500'
+                            : 'bg-amber-500'
                       ]"
+                    ></span>
+                  </div>
+                </div>
+                
+                <!-- Stock price display -->
+                <div :class="[$dc('price-display'), 'flex items-center mt-2 sm:mt-3']">
+                  <span :class="[$dc('price-label'), 'text-xs font-light text-gray-500 uppercase mr-2']">Price:</span>
+                  <span :class="[$dc('price-value'), 'text-sm font-light text-gray-800']">
+                    ₹{{ 
+                      stock.price_projections?.current_price_data?.current_price?.toFixed(2) || 
+                      stock.analysis_metadata?.current_price?.toFixed(2) || 
+                      stock.price?.toFixed(2) || 
+                      '—'
+                    }}
+                  </span>
+                </div>
+                
+                <!-- Confidence indicator -->
+                <div class="mb-5 sm:mb-6">
+                  <div class="flex items-center justify-between mb-1">
+                    <div class="font-light text-gray-700 text-xs uppercase tracking-wider">Confidence</div>
+                    <div class="text-xs font-light text-gray-600">
+                      {{ stock.model_based_signal.confidence_score }}%
+                    </div>
+                  </div>
+                  <div class="h-0.5 w-full bg-gray-100 rounded-full">
+                    <div 
+                      class="h-full transition-all duration-700 ease-out rounded-full"
+                      :class="{
+                        'bg-emerald-500': stock.model_based_signal.recommendation === 'BUY',
+                        'bg-amber-500': stock.model_based_signal.recommendation === 'HOLD',
+                        'bg-red-500': stock.model_based_signal.recommendation === 'SELL'
+                      }"
+                      :style="`width: ${stock.model_based_signal.confidence_score}%`"
+                    ></div>
+                  </div>
+                </div>
+                
+                <!-- Evidence section -->
+                <div class="mt-5 sm:mt-6 border-t border-emerald-100 pt-3 sm:pt-4 flex-grow overflow-hidden flex flex-col">
+                  <h3 class="text-xs font-light tracking-wider uppercase text-gray-700 mb-2 sm:mb-3">Evidence</h3>
+                  <ul class="text-xs sm:text-sm text-gray-600 space-y-2 sm:space-y-3 font-light overflow-hidden flex-grow">
+                    <li 
+                      v-for="(evidence, index) in stock.model_based_signal.supporting_evidence.slice(0, 2)" 
+                      :key="index"
+                      class="flex items-start"
                     >
-                      {{ stock.model_based_signal.recommendation }}
-                      <span 
-                        class="absolute bottom-0 left-0 w-full h-0.5 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
-                        :class="[
-                          stock.model_based_signal.recommendation === 'BUY' 
-                            ? 'bg-emerald-500' 
-                            : stock.model_based_signal.recommendation === 'SELL'
-                              ? 'bg-red-500'
-                              : 'bg-amber-500'
-                        ]"
-                      ></span>
-                    </div>
-                  </div>
+                      <span class="mr-2 text-emerald-400 font-light flex-shrink-0">—</span>
+                      <span class="line-clamp-3 overflow-hidden">{{ evidence }}</span>
+                    </li>
+                  </ul>
                   
-                  <!-- Stock price display -->
-                  <div class="flex items-center mt-2 sm:mt-3">
-                    <span class="text-xs font-light text-gray-500 uppercase mr-2">Price:</span>
-                    <span class="text-sm font-light text-gray-800">
-                      ₹{{ 
-                        stock.price_projections?.current_price_data?.current_price?.toFixed(2) || 
-                        stock.analysis_metadata?.current_price?.toFixed(2) || 
-                        stock.price?.toFixed(2) || 
-                        '—'
-                      }}
-                    </span>
-                  </div>
-                  
-                  <!-- Confidence indicator -->
-                  <div class="mb-5 sm:mb-6">
-                    <div class="flex items-center justify-between mb-1">
-                      <div class="font-light text-gray-700 text-xs uppercase tracking-wider">Confidence</div>
-                      <div class="text-xs font-light text-gray-600">
-                        {{ stock.model_based_signal.confidence_score }}%
-                      </div>
-                    </div>
-                    <div class="h-0.5 w-full bg-gray-100 rounded-full">
-                      <div 
-                        class="h-full transition-all duration-700 ease-out rounded-full"
-                        :class="{
-                          'bg-emerald-500': stock.model_based_signal.recommendation === 'BUY',
-                          'bg-amber-500': stock.model_based_signal.recommendation === 'HOLD',
-                          'bg-red-500': stock.model_based_signal.recommendation === 'SELL'
-                        }"
-                        :style="`width: ${stock.model_based_signal.confidence_score}%`"
-                      ></div>
-                    </div>
-                  </div>
-                  
-                  <!-- Evidence section -->
-                  <div class="mt-5 sm:mt-6 border-t border-emerald-100 pt-3 sm:pt-4 flex-grow overflow-hidden flex flex-col">
-                    <h3 class="text-xs font-light tracking-wider uppercase text-gray-700 mb-2 sm:mb-3">Evidence</h3>
-                    <ul class="text-xs sm:text-sm text-gray-600 space-y-2 sm:space-y-3 font-light overflow-hidden flex-grow">
-                      <li 
-                        v-for="(evidence, index) in stock.model_based_signal.supporting_evidence.slice(0, 2)" 
-                        :key="index"
-                        class="flex items-start"
-                      >
-                        <span class="mr-2 text-emerald-400 font-light flex-shrink-0">—</span>
-                        <span class="line-clamp-3 overflow-hidden">{{ evidence }}</span>
-                      </li>
-                    </ul>
-                    
-                    <router-link 
-                      :to="`/stock/${stock.id}`" 
-                      class="group inline-flex items-center mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 hover:text-emerald-600 transition-all duration-300 mt-auto"
-                    >
-                      <span class="uppercase tracking-wider text-xs font-light">Full Analysis</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1 transition-transform duration-300 transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </router-link>
-                  </div>
+                  <router-link 
+                    :to="`/stock/${stock.id}`" 
+                    class="group inline-flex items-center mt-3 sm:mt-4 text-xs sm:text-sm text-gray-600 hover:text-emerald-600 transition-all duration-300 mt-auto"
+                  >
+                    <span class="uppercase tracking-wider text-xs font-light">Full Analysis</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1 transition-transform duration-300 transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </router-link>
                 </div>
               </div>
             </div>
+          </div>
+          
+          <!-- Pagination controls -->
+          <div class="flex justify-center items-center mt-8 sm:mt-12">
+            <button 
+              @click="previousPage" 
+              :disabled="currentPage === 1" 
+              :class="[
+                'p-2 rounded-lg mr-2 transition-colors duration-300',
+                currentPage === 1 
+                  ? 'text-gray-400 cursor-not-allowed' 
+                  : 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
+              ]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
             
-            <!-- Pagination controls -->
-            <div class="flex justify-center items-center mt-8 sm:mt-12">
-              <button 
-                @click="previousPage" 
-                :disabled="currentPage === 1" 
-                :class="[
-                  'p-2 rounded-lg mr-2 transition-colors duration-300',
-                  currentPage === 1 
-                    ? 'text-gray-400 cursor-not-allowed' 
-                    : 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
-                ]"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              
-              <div class="flex items-center">
-                <span class="text-sm font-light text-gray-600 mx-2">Page {{ currentPage }} of {{ totalPages }}</span>
-              </div>
-              
-              <button 
-                @click="nextPage" 
-                :disabled="currentPage === totalPages" 
-                :class="[
-                  'p-2 rounded-lg ml-2 transition-colors duration-300',
-                  currentPage === totalPages 
-                    ? 'text-gray-400 cursor-not-allowed' 
-                    : 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
-                ]"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+            <div class="flex items-center">
+              <span class="text-sm font-light text-gray-600 mx-2">Page {{ currentPage }} of {{ totalPages }}</span>
             </div>
+            
+            <button 
+              @click="nextPage" 
+              :disabled="currentPage === totalPages" 
+              :class="[
+                'p-2 rounded-lg ml-2 transition-colors duration-300',
+                currentPage === totalPages 
+                  ? 'text-gray-400 cursor-not-allowed' 
+                  : 'text-gray-700 hover:text-emerald-700 hover:bg-emerald-50'
+              ]"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -279,8 +279,11 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import NavigationHeader from '../components/NavigationHeader.vue'
 import MobileNavigation from '../components/MobileNavigation.vue'
+
+const { $dc, $did, $da } = useNuxtApp()
 
 // State
 const stocks = ref([])

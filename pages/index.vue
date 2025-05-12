@@ -1,40 +1,40 @@
 <template>
-  <div class="h-screen flex flex-col overflow-hidden">
+  <div :class="[$dc('home-container'), 'h-screen flex flex-col overflow-hidden']">
     <NavigationHeader />
     <MobileNavigation />
     
-    <div class="flex-1 flex flex-col lg:flex-row md:ml-20 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20">
+    <div :class="[$dc('main-content'), 'flex-1 flex flex-col lg:flex-row md:ml-20 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/20']">
       <!-- Main content centered in page -->
-      <div class="w-full h-full flex items-center justify-center px-4 sm:px-8">
-        <div class="max-w-3xl mx-auto">
+      <div :class="[$dc('content-wrapper'), 'w-full h-full flex items-center justify-center px-4 sm:px-8']">
+        <div :class="[$dc('content-container'), 'max-w-3xl mx-auto']">
           <!-- Logo and title -->
-          <div class="mb-6 md:mb-10 flex items-center justify-center lg:justify-start">
-            <div class="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center shadow-md">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div :class="[$dc('logo-section'), 'mb-6 md:mb-10 flex items-center justify-center lg:justify-start']">
+            <div :class="[$dc('logo'), 'w-8 h-8 md:w-10 md:h-10 flex-shrink-0 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-lg flex items-center justify-center shadow-md']">
+              <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('logo-icon'), 'h-4 w-4 md:h-5 md:w-5 text-white']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
             </div>
-            <h1 class="ml-3 md:ml-4 text-3xl md:text-4xl lg:text-6xl font-light tracking-tight text-gray-900">
-              <span class="block relative">
-                ST<span class="text-emerald-600">O</span>NKZ<span class="absolute top-0 -right-3 w-2 h-2 bg-emerald-600 rounded-full"></span>
+            <h1 :class="[$dc('site-title'), 'ml-3 md:ml-4 text-3xl md:text-4xl lg:text-6xl font-light tracking-tight text-gray-900']">
+              <span :class="[$dc('title-text'), 'block relative']">
+                ST<span :class="[$dc('title-highlight'), 'text-emerald-600']">O</span>NKZ<span :class="[$dc('title-dot'), 'absolute top-0 -right-3 w-2 h-2 bg-emerald-600 rounded-full']"></span>
               </span>
             </h1>
           </div>
           
           <!-- Tagline -->
-          <div class="text-center lg:text-left mb-8 md:mb-12">
-            <h2 class="text-xl md:text-2xl lg:text-4xl font-light tracking-wider text-gray-800 mb-4 md:mb-6">
-              Financial <span class="text-emerald-600">intelligence</span> reimagined
+          <div :class="[$dc('tagline-section'), 'text-center lg:text-left mb-8 md:mb-12']">
+            <h2 :class="[$dc('tagline'), 'text-xl md:text-2xl lg:text-4xl font-light tracking-wider text-gray-800 mb-4 md:mb-6']">
+              Financial <span :class="[$dc('tagline-highlight'), 'text-emerald-600']">intelligence</span> reimagined
             </h2>
             
-            <p class="text-gray-600 font-light tracking-wide leading-relaxed text-sm md:text-base">
+            <p :class="[$dc('description'), 'text-gray-600 font-light tracking-wide leading-relaxed text-sm md:text-base']">
               Advanced market analysis and stock projections with unmatched precision and clarity
             </p>
           </div>
           
           <!-- Search box -->
-          <div class="relative mb-8 md:mb-12">
-            <div class="relative">
+          <div :class="[$dc('search-wrapper'), 'relative mb-8 md:mb-12']">
+            <div :class="[$dc('search-container'), 'relative']">
               <input
                 v-model="query"
                 @focus="showDropdown = true"
@@ -43,36 +43,37 @@
                 @keydown.up.prevent="move(-1)"
                 @keydown.enter.prevent="select(activeIndex)"
                 type="text"
+                :name="$did('stock-search')"
                 autocomplete="off"
                 placeholder="Search stocks..."
-                class="w-full border-0 border-b-2 border-emerald-200 pl-10 pr-6 md:pl-12 md:pr-12 py-4 md:py-5 focus:outline-none focus:border-emerald-500 bg-white/80 font-light text-base md:text-lg placeholder:text-gray-400 placeholder:font-light rounded-xl shadow-sm"
+                :class="[$dc('search-input'), 'w-full border-0 border-b-2 border-emerald-200 pl-10 pr-6 md:pl-12 md:pr-12 py-4 md:py-5 focus:outline-none focus:border-emerald-500 bg-white/80 font-light text-base md:text-lg placeholder:text-gray-400 placeholder:font-light rounded-xl shadow-sm']"
               />
-              <div class="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div :class="[$dc('search-icon'), 'absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2']">
+                <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('search-icon-svg'), 'h-4 w-4 md:h-5 md:w-5 text-gray-400']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <div v-if="loading" class="absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2">
-                <svg class="animate-spin h-4 w-4 md:h-5 md:w-5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+              <div v-if="loading" :class="[$dc('loading-indicator'), 'absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2']">
+                <svg :class="[$dc('loading-spinner'), 'animate-spin h-4 w-4 md:h-5 md:w-5 text-emerald-500']" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
               </div>
             </div>
             
-            <ul v-if="showDropdown && filtered.length" class="absolute z-10 left-0 right-0 bg-white border border-emerald-100 shadow-lg rounded-xl max-h-64 overflow-y-auto transition-all duration-300">
+            <ul v-if="showDropdown && filtered.length" :class="[$dc('dropdown-list'), 'absolute z-10 left-0 right-0 bg-white border border-emerald-100 shadow-lg rounded-xl max-h-64 overflow-y-auto transition-all duration-300']">
               <li
                 v-for="(item, i) in filtered"
                 :key="item.id"
-                :class="[activeIndex === i ? 'bg-emerald-50' : '', 'px-4 md:px-5 py-3 md:py-4 cursor-pointer hover:bg-emerald-50 transition flex items-center justify-between font-light border-b border-emerald-50 last:border-b-0']"
+                :class="[activeIndex === i ? 'bg-emerald-50' : '', $dc('dropdown-item'), 'px-4 md:px-5 py-3 md:py-4 cursor-pointer hover:bg-emerald-50 transition flex items-center justify-between font-light border-b border-emerald-50 last:border-b-0']"
                 @mouseenter="prefetch(item.id, i)"
                 @mouseleave="clearPrefetch()"
                 @mousedown="select(i, $event)"
               >
-                <div class="flex items-center">
-                  <span class="w-2 h-2 bg-emerald-500 rounded-full mr-3"></span>
-                  <span class="text-sm md:text-base">{{ item.name || item.id }}</span>
+                <div :class="[$dc('item-content'), 'flex items-center']">
+                  <span :class="[$dc('item-dot'), 'w-2 h-2 bg-emerald-500 rounded-full mr-3']"></span>
+                  <span :class="[$dc('item-name'), 'text-sm md:text-base']">{{ item.name || item.id }}</span>
                 </div>
-                <div v-if="activeIndex === i" class="text-emerald-600 flex items-center">
-                  <span class="text-xs uppercase tracking-wider mr-2">View</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div v-if="activeIndex === i" :class="[$dc('view-button'), 'text-emerald-600 flex items-center']">
+                  <span :class="[$dc('view-text'), 'text-xs uppercase tracking-wider mr-2']">View</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('view-arrow'), 'h-3 w-3 md:h-4 md:w-4']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </div>
@@ -81,11 +82,11 @@
           </div>
           
           <!-- Action buttons -->
-          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pb-16 md:pb-0">
-            <router-link to="/top-stocks" class="group w-full sm:w-auto">
-              <div class="flex items-center justify-center px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <span class="text-xs md:text-sm font-medium uppercase tracking-wider mr-3">Top Recommendations</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div :class="[$dc('actions'), 'flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pb-16 md:pb-0']">
+            <router-link to="/top-stocks" :class="[$dc('action-link'), 'group w-full sm:w-auto']">
+              <div :class="[$dc('action-button'), 'flex items-center justify-center px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1']">
+                <span :class="[$dc('button-text'), 'text-xs md:text-sm font-medium uppercase tracking-wider mr-3']">Top Recommendations</span>
+                <svg xmlns="http://www.w3.org/2000/svg" :class="[$dc('button-arrow'), 'h-4 w-4 md:h-5 md:w-5 transition-transform duration-300 transform group-hover:translate-x-1']" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
               </div>
@@ -93,10 +94,10 @@
           </div>
           
           <!-- Loading indicator - changed to fixed positioning to prevent pushing content -->
-          <div v-if="navigating" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-            <div class="flex flex-col items-center bg-white/80 backdrop-blur-sm py-4 px-6 rounded-lg shadow-lg">
-              <svg class="animate-spin h-6 w-6 md:h-8 md:w-8 text-emerald-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-              <span class="text-emerald-600 font-light uppercase tracking-wider text-xs">Loading</span>
+          <div v-if="navigating" :class="[$dc('page-loading'), 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50']">
+            <div :class="[$dc('loading-container'), 'flex flex-col items-center bg-white/80 backdrop-blur-sm py-4 px-6 rounded-lg shadow-lg']">
+              <svg :class="[$dc('loading-spinner-large'), 'animate-spin h-6 w-6 md:h-8 md:w-8 text-emerald-600 mb-2']" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+              <span :class="[$dc('loading-text'), 'text-emerald-600 font-light uppercase tracking-wider text-xs']">Loading</span>
             </div>
           </div>
         </div>
@@ -110,6 +111,8 @@ import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import NavigationHeader from '../components/NavigationHeader.vue'
 import MobileNavigation from '../components/MobileNavigation.vue'
+
+const { $dc, $did, $da } = useNuxtApp();
 
 const query = ref('')
 const showDropdown = ref(false)

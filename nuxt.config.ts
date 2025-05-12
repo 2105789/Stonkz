@@ -3,6 +3,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss'],
+  // Register the dynamic classes plugin
+  plugins: [
+    '~/plugins/dynamicClasses.js'
+  ],
   app: {
     head: {
       title: 'Stonkz - Stock Analysis Platform',
