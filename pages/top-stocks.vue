@@ -293,7 +293,7 @@ const activeTab = ref('all')
 const showPriceFilter = ref(false)
 const selectedPriceRanges = ref([])
 const currentPage = ref(1)
-const itemsPerPage = 9
+const itemsPerPage = 9 // Match this with the backend limit
 
 // Filter options
 const tabs = [
@@ -315,42 +315,7 @@ const priceRanges = [
 
 // Filtered stocks based on active tab and selected price ranges
 const filteredStocks = computed(() => {
-  let filtered = [...stocks.value]
-  
-  // Filter by recommendation type
-  if (activeTab.value !== 'all') {
-    filtered = filtered.filter(stock => 
-      stock.model_based_signal?.recommendation === activeTab.value
-    )
-  }
-  
-  // Filter by price range if any selected
-  if (selectedPriceRanges.value.length > 0) {
-    filtered = filtered.filter(stock => {
-      // Get current price from price_projections data structure
-      const price = stock.price_projections?.current_price_data?.current_price || stock.analysis_metadata?.current_price || stock.price || 0
-      
-      return selectedPriceRanges.value.some(range => {
-        if (range === 'very_low') return price >= 0 && price <= 50
-        if (range === 'low') return price > 50 && price <= 100
-        if (range === 'low_medium') return price > 100 && price <= 250
-        if (range === 'medium') return price > 250 && price <= 500
-        if (range === 'medium_high') return price > 500 && price <= 1000
-        if (range === 'high') return price > 1000 && price <= 2000
-        if (range === 'very_high') return price > 2000
-        return false
-      })
-    })
-  }
-  
-  // Sort by confidence score (highest to lowest)
-  filtered.sort((a, b) => {
-    const scoreA = a.model_based_signal?.confidence_score || 0
-    const scoreB = b.model_based_signal?.confidence_score || 0
-    return scoreB - scoreA // Descending order
-  })
-  
-  return filtered
+  return stocks.value
 })
 
 // Calculate total pages for pagination
@@ -364,9 +329,16 @@ const paginatedStocks = computed(() => {
   return filteredStocks.value.slice(startIndex, startIndex + itemsPerPage)
 })
 
-// Reset to page 1 when filters change
-watch([activeTab, selectedPriceRanges], () => {
-  currentPage.value = 1
+// Watch for filter changes and refetch data
+watch([activeTab], () => {
+  currentPage.value = 1 // Reset to page 1
+  fetchStocks() // Refetch data with new filters
+})
+
+// Watch for price range changes - debounce to avoid multiple API calls when changing multiple ranges
+watch(selectedPriceRanges, () => {
+  currentPage.value = 1 // Reset to page 1
+  fetchStocks() // Refetch data with new filters
 })
 
 // Fetch stocks data from API
@@ -375,17 +347,58 @@ const fetchStocks = async () => {
   error.value = null
   
   try {
-    const response = await fetch('/api/top-stocks')
+    // Build the query parameters based on filters
+    const params = new URLSearchParams()
+    
+    // Add recommendation type if not on "all" tab
+    if (activeTab.value !== 'all') {
+      params.append('type', activeTab.value)
+    }
+    
+    // Add price filter if any is selected
+    if (selectedPriceRanges.value.length > 0) {
+      // Convert selected price ranges to actual min/max values
+      let minPrice = Number.MAX_SAFE_INTEGER
+      let maxPrice = 0
+      
+      selectedPriceRanges.value.forEach(range => {
+        if (range === 'very_low') { minPrice = Math.min(minPrice, 0); maxPrice = Math.max(maxPrice, 50) }
+        else if (range === 'low') { minPrice = Math.min(minPrice, 50); maxPrice = Math.max(maxPrice, 100) }
+        else if (range === 'low_medium') { minPrice = Math.min(minPrice, 100); maxPrice = Math.max(maxPrice, 250) }
+        else if (range === 'medium') { minPrice = Math.min(minPrice, 250); maxPrice = Math.max(maxPrice, 500) }
+        else if (range === 'medium_high') { minPrice = Math.min(minPrice, 500); maxPrice = Math.max(maxPrice, 1000) }
+        else if (range === 'high') { minPrice = Math.min(minPrice, 1000); maxPrice = Math.max(maxPrice, 2000) }
+        else if (range === 'very_high') { minPrice = Math.min(minPrice, 2000); maxPrice = Number.MAX_SAFE_INTEGER }
+      })
+      
+      // Only add params if we have valid ranges
+      if (minPrice !== Number.MAX_SAFE_INTEGER) {
+        params.append('priceMin', minPrice.toString())
+      }
+      if (maxPrice !== 0 && maxPrice !== Number.MAX_SAFE_INTEGER) {
+        params.append('priceMax', maxPrice.toString())
+      }
+    }
+    
+    // Construct the URL with query parameters
+    const url = `/api/top-stocks${params.toString() ? `?${params.toString()}` : ''}`
+    console.log("Fetching stocks with URL:", url);
+    const response = await fetch(url)
     const data = await response.json()
     
-    // Combine all categories into a single array
-    const allStocks = [
-      ...(data.buy || []),
-      ...(data.hold || []),
-      ...(data.sell || [])
-    ]
+    // Combine all categories into a single array based on active tab
+    let allStocks = []
+    if (activeTab.value === 'all' || activeTab.value === 'BUY') {
+      allStocks = [...allStocks, ...(data.buy || [])]
+    }
+    if (activeTab.value === 'all' || activeTab.value === 'HOLD') {
+      allStocks = [...allStocks, ...(data.hold || [])]
+    }
+    if (activeTab.value === 'all' || activeTab.value === 'SELL') {
+      allStocks = [...allStocks, ...(data.sell || [])]
+    }
     
-    // Use actual price data from the stock data
+    // Set stocks from fetched data
     stocks.value = allStocks.map(stock => {
       // Extract the current price from price_projections if available
       const currentPrice = stock.price_projections?.current_price_data?.current_price || 
@@ -393,17 +406,22 @@ const fetchStocks = async () => {
       
       return {
         ...stock,
-        // Keep original price if available, otherwise use currentPrice, or fallback to a random price only for demo
-        price: stock.price || currentPrice || Math.floor(Math.random() * 4000) + 100
+        // Keep original price if available, otherwise use currentPrice
+        price: stock.price || currentPrice || 0
       }
     })
     
-    // Sort stocks by confidence score after fetching
-    stocks.value.sort((a, b) => {
-      const scoreA = a.model_based_signal?.confidence_score || 0
-      const scoreB = b.model_based_signal?.confidence_score || 0
-      return scoreB - scoreA // Descending order
-    })
+    // If we need to sort by confidence score (when displaying multiple categories)
+    if (activeTab.value === 'all') {
+      stocks.value.sort((a, b) => {
+        const scoreA = a.model_based_signal?.confidence_score || 0
+        const scoreB = b.model_based_signal?.confidence_score || 0
+        return scoreB - scoreA // Descending order
+      })
+    }
+    
+    // Reset to page 1 if filters changed
+    currentPage.value = 1
   } catch (err) {
     console.error('Failed to fetch stocks:', err)
     error.value = 'Failed to load recommendations. Please try again.'
@@ -414,17 +432,25 @@ const fetchStocks = async () => {
 
 // Toggle price range filter
 const togglePriceRange = (rangeId) => {
-  const index = selectedPriceRanges.value.indexOf(rangeId)
+  console.log("Toggling price range:", rangeId);
+  const index = selectedPriceRanges.value.indexOf(rangeId);
   if (index === -1) {
-    selectedPriceRanges.value.push(rangeId)
+    // Create a new array to ensure reactivity
+    selectedPriceRanges.value = [...selectedPriceRanges.value, rangeId];
   } else {
-    selectedPriceRanges.value.splice(index, 1)
+    // Create a new array to ensure reactivity
+    selectedPriceRanges.value = selectedPriceRanges.value.filter(id => id !== rangeId);
   }
+  // Manually trigger fetch since watch might not detect the change
+  fetchStocks();
 }
 
 // Clear price range filters
 const clearPriceFilters = () => {
-  selectedPriceRanges.value = []
+  console.log("Clearing price filters");
+  selectedPriceRanges.value = [];
+  // Manually trigger fetch since watch might not detect the change
+  fetchStocks();
 }
 
 // Pagination methods
